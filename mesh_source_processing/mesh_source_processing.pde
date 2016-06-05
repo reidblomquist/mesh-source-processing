@@ -24,6 +24,8 @@ int indexVboId;
 int posLoc;
 int colorLoc;
 
+long now;
+
 PJOGL pgl;
 GL2ES2 gl;
 
@@ -68,7 +70,10 @@ void draw() {
   rotateX(a);
   rotateY(a*2);
 
-  updateGeometry();
+  now = System.currentTimeMillis();
+  double timeDbl = (double)now * 0.001;
+  print(timeDbl);
+  updateGeometry(); //<>//
 
   pgl = (PJOGL) beginPGL();
   gl = pgl.gl.getGL2ES2();
