@@ -21,9 +21,7 @@ void draw()
 
   /*translate( width/2, 20, -100 );*/
   //rotateY( radians( frameCount ));
-  for (Polygon poly : mesh.mesh) {
-    poly.display();
-  }
+  mesh.display();
 
   if (saveOne) {
     saveFrame("images/"+getClass().getSimpleName()+"-####.png");
