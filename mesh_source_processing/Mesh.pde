@@ -1,30 +1,59 @@
 class Mesh {
-  PShape s;
-  int zvc = 15;
-  PVector[][] vertices = new PVector[zvc][zvc];
   boolean initialized = false;
+  int gridResolution = 15;
+  int vertexLength = gridResolution * gridResolution;
+  PVector[] vertices = new PVector[vertexLength];
+  PVector[] uv = new PVector[vertexLength];
+  Vector4[] tangents = new Vector4[vertexLength];
+  Vector4 tangent = new Vector4(1.0, 0.0, 0.0, -1.0);
+  int[] triangles = new int[gridResolution * gridResolution * 6];
+
+  ArrayList<Polygon> mesh;
 
   Mesh() {
-    s = createShape();
-
     if (initialized == false) {
-      for (int j = 0; j < zvc; j++) {
-        for (int i = 0; i < zvc; i++) {
-          vertices[i][j] = new PVector( i*40 + random(-10, 10), j*40 + random(-10, 10), random(-20, 20) );
+      for (int i = 0, y = 0; y < gridResolution; y++) {
+        for (int x = 0; x < gridResolution; x++, i++) {
+          vertices[i] = new PVector( x, y, 0 );
+          uv[i] = new PVector(x / gridResolution, y / gridResolution);
+          tangents[i] = tangent;
         }
       }
     }
 
-    for (int j = 0; j < (zvc - 1); j ++) {
-      s.beginShape();
-      s.fill(221, 4, 126);
-      s.noStroke();
-      for (int i = 0; i < zvc; i++) {
-        s.vertex( vertices[i][j].x  , vertices[i][j].y  , vertices[i][j].z );
-        s.vertex( vertices[i][j+1].x, vertices[i][j+1].y, vertices[i][j+1].z );
-      }
-      s.endShape();
+    mesh = new ArrayList<Polygon>();
+
+    for (int i = 0; i < vertexLength; i++) {
+        Polygon p = new Polygon(vertices[i].x, vertices[i].y, vertices[i].z);
+        mesh.add(p);
     }
+  }
+
+  void display() {
+    for (Polygon poly : mesh) {
+      poly.display();
+    }
+  }
+
+  void sendMesh(PShape mesh) {
+  }
+}
+
+class Polygon {
+  PShape s;
+  float x, y, z;
+
+  Polygon(float x_, float y_, float z_) {
+    s = createShape();
+    x = x_;
+    y = y_;
+    z = z_;
+
+    s.beginShape();
+    s.fill(221, 4, 126);
+    s.noStroke();
+    s.vertex(x, y, z);
+    s.endShape();
   }
 
   void display() {
@@ -32,8 +61,5 @@ class Mesh {
     translate(0, 0);
     shape(s);
     popMatrix();
-  }
-
-  void sendMesh(PShape mesh) {
   }
 }
