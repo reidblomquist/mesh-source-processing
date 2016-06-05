@@ -10,13 +10,11 @@ class Mesh {
   int[] triangles = new int[gridResolution * gridResolution * 6];
 
   Mesh() {
-    if (initialized == false) {
-      for (int i = 0, y = 0; y < gridResolution; y++) {
-        for (int x = 0; x < gridResolution; x++, i++) {
-          vertices[i] = new PVector( x, y, 0 );
-          uv[i] = new PVector(x / gridResolution, y / gridResolution);
-          tangents[i] = tangent;
-        }
+    for (int i = 0, y = 0; y < gridResolution; y++) {
+      for (int x = 0; x < gridResolution; x++, i++) {
+        vertices[i] = new PVector( x, y, 0 );
+        uv[i] = new PVector(x / gridResolution, y / gridResolution);
+        tangents[i] = tangent;
       }
     }
 
@@ -27,11 +25,11 @@ class Mesh {
         triangles[ti + 4] = triangles[ti + 1] = vi + gridResolution + 1;
         triangles[ti + 5] = vi + gridResolution + 2;
       }
-      mesh = createShape();
     }
   }
 
   void display() {
+    mesh = createShape();
     pushMatrix();
     mesh.beginShape();
     mesh.fill(221, 4, 126);
