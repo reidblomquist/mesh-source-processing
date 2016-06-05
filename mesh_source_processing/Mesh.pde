@@ -1,4 +1,5 @@
 class Mesh {
+  PShape mesh;
   boolean initialized = false;
   int gridResolution = 15;
   int vertexLength = gridResolution * gridResolution;
@@ -7,8 +8,6 @@ class Mesh {
   Vector4[] tangents = new Vector4[vertexLength];
   Vector4 tangent = new Vector4(1.0, 0.0, 0.0, -1.0);
   int[] triangles = new int[gridResolution * gridResolution * 6];
-
-  ArrayList<Polygon> mesh;
 
   Mesh() {
     if (initialized == false) {
@@ -28,47 +27,22 @@ class Mesh {
         triangles[ti + 4] = triangles[ti + 1] = vi + gridResolution + 1;
         triangles[ti + 5] = vi + gridResolution + 2;
       }
+      mesh = createShape();
     }
-
-    mesh = new ArrayList<Polygon>();
-
-    for (int i = 0; i < vertexLength; i++) {
-        Polygon p = new Polygon(vertices[i].x, vertices[i].y, vertices[i].z);
-        mesh.add(p);
-    }
-  }
-
-  void display() {
-    for (Polygon poly : mesh) {
-      poly.display();
-    }
-  }
-
-  void sendMesh(PShape mesh) {
-  }
-}
-
-class Polygon {
-  PShape s;
-  float x, y, z;
-
-  Polygon(float x_, float y_, float z_) {
-    s = createShape();
-    x = x_;
-    y = y_;
-    z = z_;
-
-    s.beginShape();
-    s.fill(221, 4, 126);
-    s.noStroke();
-    s.vertex(x, y, z);
-    s.endShape();
   }
 
   void display() {
     pushMatrix();
-    translate(0, 0);
-    shape(s);
+    mesh.beginShape();
+    mesh.fill(221, 4, 126);
+    mesh.noStroke();
+    for (int i = 0; i < vertexLength; i++) {
+        mesh.vertex(vertices[i].x, vertices[i].y, vertices[i].z);
+    }
+    mesh.endShape();
     popMatrix();
+  }
+
+  void sendMesh(PShape mesh) {
   }
 }
